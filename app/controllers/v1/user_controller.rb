@@ -32,8 +32,13 @@ class V1::UserController < ApplicationController
     
     # GET /user/
     def index
-        @users = User.all
-        render json: @users, status: :ok
+        auxArray = []
+        User.all.each do |u|
+            a = u.as_json( only: [ "id", "name", "email", "role", ] )
+            auxArray.push( a )
+        end
+
+        render json: auxArray, status: :ok
     end
     
     # GET /user/:id
