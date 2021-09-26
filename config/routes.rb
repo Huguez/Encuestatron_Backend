@@ -9,7 +9,7 @@ Rails.application.routes.draw do
     # get '/user/', to: 'user#index'
     # get '/user/:id', to: 'user#show'
 
-    resources :session, only: [ :create, :destroy ]
+    resources :session, only: [ :post ]
 
   end
 

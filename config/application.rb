@@ -28,23 +28,26 @@ module Ecuestatron
     #
     # These settings can be overridden in specific environments using the files
     # in config/environments, which are processed later.
-    #
-    # config.time_zone = "Central Time (US & Canada)"
+    
     # config.eager_load_paths << Rails.root.join("extras")
+    config.time_zone = "America/Chihuahua"
+    config.autoload_paths << Rails.root.join('lib')
 
     # Only loads a smaller set of middleware suitable for API only apps.
     # Middleware like session, flash, cookies can be added back manually.
     # Skip views, helpers and assets when generating a new resource.
     config.api_only = true
 
-    config.middleware.insert_before 0, Rack::Cors do
-      allow do
-        origins 'http://localhost:8000'
+    # config.middleware.insert_before 0, Rack::Cors do
+    #   allow do
+    #     origins 'http://localhost:3000'
         
-        resource( '/user', headers: :any, methods: [:get ]  ) 
-        # :post, :put, :patch, :delete, :options, :head
-      end
-    end
+    #     resource( '*', headers: :any, methods: [ :get, :post, :put, :patch, :delete, :options, :head ]  ) 
+    #     # resource 'v1/session/', headers: :any, methods: [ :post ]
+    #     # post '/v1/session/', to: 'session#create'
+    #     # :post, :put, :patch, :delete, :options, :head
+    #   end
+    # end
 
   end
 end

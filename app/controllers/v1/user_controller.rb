@@ -1,10 +1,11 @@
 class V1::UserController < ApplicationController
     
     rescue_from ActionController::ParameterMissing do |exception|
-
         render :json => {:error => exception.message, :msg => "Faltaron los parametros" }, :status => 422
     end
 
+    before_action :authenticate
+    
     # POST /user/
     def create
         begin
@@ -32,13 +33,13 @@ class V1::UserController < ApplicationController
     
     # GET /user/
     def index
-        auxArray = []
+        auxArray = Array.wrap(nil)
         User.all.each do |u|
             a = u.as_json( only: [ "id", "name", "email", "role", ] )
             auxArray.push( a )
         end
 
-        render json: auxArray, status: :ok
+        render json: auxArray
     end
     
     # GET /user/:id
@@ -86,9 +87,20 @@ class V1::UserController < ApplicationController
 
     private
 
+        def authenticate
+
+            if request.headers['uidtkn']
+                x_token = request.headers['uidtkn'].split(' ').last
+                resp = JsonWebToken.decode( x_token )
+                render :json => { :error => "Token invalido" }, status: :unauthorized unless resp[ "user_id" ]
+                return if resp
+            else
+                render :json => { :error => "No hay token" }, status: :unauthorized
+            end
+        end
+
         def user_params
             # :name, :email, :password, :role 
             params.require("user").permit( [ "name", "email", "password", "role" ] )
         end
-
 end

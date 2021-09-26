@@ -7,16 +7,13 @@ class V1::SessionController < ApplicationController
     def create
         parametros = login_params
         user = User.where( email: parametros["email"] ).first
+        x_token = JsonWebToken.encode( user_id: user.id )
+        
         if user&.valid_password?( parametros["password"] )
-            render :json => { :toke => "Esto es un token", :user =>  user.as_json( only: [ :name, :email ] ) }
+            render :json => { :uidtkn => x_token, :user =>  user.as_json( only: [ :name, :email, :role ] ) }
         else
             head( :unauthorized ) # esto es equivalente a esto # render status: :unauthorized
         end
-    end
-
-    # DELETE /session/:id
-    def destroy
-        render :json => { :resutl => "esto es una destroy" }
     end
 
     private
@@ -24,9 +21,5 @@ class V1::SessionController < ApplicationController
         def login_params
             # params.require('user').permit( [ "email", "password" ] )
             params.require('session').permit( [ "email", "password" ] )
-        end
-
-        def register_params
-            puts "sign up"
         end
 end
