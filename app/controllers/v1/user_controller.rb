@@ -6,6 +6,7 @@ class V1::UserController < ApplicationController
 
     before_action :authenticate
     
+
     # POST /user/
     def create
         begin

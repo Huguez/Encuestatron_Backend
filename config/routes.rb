@@ -5,11 +5,14 @@ Rails.application.routes.draw do
   namespace :v1 do
 
     resources :user
-    # , only: [ :index ]
+    # :exxcept => [], :only => [ :index ]
     # get '/user/', to: 'user#index'
-    # get '/user/:id', to: 'user#show'
+    
+    # resources :session
 
-    resources :session, only: [ :post ]
+    match '/session/login' => 'session#login', :via => :post
+    match '/session/register' => 'session#register', :via => :post
+    match '/session/renew' => 'session#renew', :via => :get
 
   end
 
