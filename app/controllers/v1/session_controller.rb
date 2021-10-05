@@ -63,7 +63,7 @@ class V1::SessionController < ApplicationController
             begin
                 x_token = request.headers['uidtkn'].split(' ').last
                 resp = JsonWebToken.decode( x_token )
-                
+
                 aux = resp.as_json()
                 user_id = aux["user_id"];
                 _user = User.where( id: user_id ).first
@@ -74,7 +74,7 @@ class V1::SessionController < ApplicationController
                     :user => _user.as_json( only: [ :id, :name, :email, :role ] ),
                     :uidtkn => x_token
                 }
-            rescue => e
+            rescue JWT::ExpiredSignature => e
                 render json: {
                     error: e.to_s
                 }, status: :unprocessable_entity

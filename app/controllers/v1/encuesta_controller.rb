@@ -1,0 +1,95 @@
+class V1::EncuestaController < ApplicationController
+
+    rescue_from ActionController::ParameterMissing do |exception|
+        render :json => {:error => exception.message, :msg => "Faltaron los parametros" }, :status => 422
+    end
+
+    before_action :authenticate
+
+    #POST /encuesta/
+    def create
+        begin    
+            aux = get_params
+            aux["opciones"] = aux["opciones"].split(", ")
+            
+            encuesta = Encuestum.new( aux )
+
+            if encuesta.save
+                render :json => { :encuesta => encuesta }, :status => :created
+            else
+                render json: encuesta.error, status: :unprocessable_entity
+            end
+        rescue => e
+            render json: {
+                error: e.to_s
+            }, status: :unprocessable_entity
+        end
+    end
+
+    #GET /encuesta/
+    def index
+        e = Encuestum.all
+        render json: e
+    end
+
+    #GET /encuesta/:id
+    def show
+        begin
+            e = Encuestum.find( params["id"] )
+            render json: e, status: :ok
+        rescue ActiveRecord::RecordNotFound => e
+            render json: {
+                error: e.to_s
+            }, status: :not_found
+        end
+    end
+
+    # PUT /encuesta/:id
+    def update
+        begin
+            encuesta = Encuestum.find( params["id"] )
+            if encuesta.update( user_params )
+                render json: encuesta, status: :ok
+            else
+                render json: encuesta.error, status: :unprocessable_entity
+            end
+        rescue ActiveRecord::RecordNotFound => e
+            render json: {
+                error: e.to_s
+            }, status: :not_found 
+        end
+    end
+
+    # DELETE /encuesta/:id
+    def destroy
+        begin
+            e = Encuestum.find( params["id"] )
+            if e.destroy
+                render json: e, status: :ok
+            end
+        rescue  ActiveRecord::RecordNotFound => e
+            render json: {
+                error: e.to_s
+            }, status: :not_found
+        end
+    end
+
+    private
+
+    def authenticate
+
+        if request.headers['uidtkn']
+            x_token = request.headers['uidtkn'].split(' ').last
+            resp = JsonWebToken.decode( x_token )
+            render :json => { :error => "Token invalido" }, status: :unauthorized unless resp[ "user_id" ]
+            return if resp
+        else
+            render :json => { :error => "No hay token" }, status: :unauthorized
+        end
+    end    
+
+    def get_params
+        # :name, :email, :password, :role 
+        params.require("encuestum").permit( [ "titulo", "descripcion", "opciones", "activo", "id_user_creator" ] )
+    end
+end

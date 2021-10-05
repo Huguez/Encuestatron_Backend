@@ -3,12 +3,10 @@ require 'jwt'
 class JsonWebToken    
     class << self
       
-        def renew( token )
-        end
-
-        def encode( payload, exp = 24.hours.from_now)
+        def encode( payload, exp = 90.days.from_now )
+            
             payload[:exp] = exp.to_i
-            JWT.encode(payload, Rails.application.secrets.secret_key_base)
+            JWT.encode( payload, Rails.application.secrets.secret_key_base )
         end
    
         def decode(token)

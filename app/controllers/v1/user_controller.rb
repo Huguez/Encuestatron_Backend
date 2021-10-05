@@ -88,20 +88,20 @@ class V1::UserController < ApplicationController
 
     private
 
-        def authenticate
+    def authenticate
 
-            if request.headers['uidtkn']
-                x_token = request.headers['uidtkn'].split(' ').last
-                resp = JsonWebToken.decode( x_token )
-                render :json => { :error => "Token invalido" }, status: :unauthorized unless resp[ "user_id" ]
-                return if resp
-            else
-                render :json => { :error => "No hay token" }, status: :unauthorized
-            end
+        if request.headers['uidtkn']
+            x_token = request.headers['uidtkn'].split(' ').last
+            resp = JsonWebToken.decode( x_token )
+            render :json => { :error => "Token invalido" }, status: :unauthorized unless resp[ "user_id" ]
+            return if resp
+        else
+            render :json => { :error => "No hay token" }, status: :unauthorized
         end
+    end
 
-        def user_params
-            # :name, :email, :password, :role 
-            params.require("user").permit( [ "name", "email", "password", "role" ] )
-        end
+    def user_params
+        # :name, :email, :password, :role 
+        params.require("user").permit( [ "name", "email", "password", "role" ] )
+    end
 end
