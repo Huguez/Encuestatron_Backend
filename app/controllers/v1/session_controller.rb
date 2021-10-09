@@ -72,7 +72,8 @@ class V1::SessionController < ApplicationController
     
                 render :json => { 
                     :user => _user.as_json( only: [ :id, :name, :email, :role ] ),
-                    :uidtkn => x_token
+                    :uidtkn => x_token,
+                    :ok => true
                 }
             rescue JWT::ExpiredSignature => e
                 render json: {

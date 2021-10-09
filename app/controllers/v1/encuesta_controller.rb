@@ -15,7 +15,7 @@ class V1::EncuestaController < ApplicationController
             encuesta = Encuestum.new( aux )
 
             if encuesta.save
-                render :json => { :encuesta => encuesta }, :status => :created
+                render :json => { :ok => true, :encuesta => encuesta }, :status => :created
             else
                 render json: encuesta.error, status: :unprocessable_entity
             end
@@ -28,15 +28,21 @@ class V1::EncuestaController < ApplicationController
 
     #GET /encuesta/
     def index
+        begin
         e = Encuestum.all
-        render json: e
+        render :json => { :encuestas => e, :ok => true  } , :status => :accepted
+        rescue => e
+            render json: {
+                error: e.to_s
+            }, status: :not_found
+        end
     end
 
     #GET /encuesta/:id
     def show
         begin
             e = Encuestum.find( params["id"] )
-            render json: e, status: :ok
+            render :json => { :encuesta => e, :ok => true } , status: :accepted
         rescue ActiveRecord::RecordNotFound => e
             render json: {
                 error: e.to_s
@@ -49,7 +55,7 @@ class V1::EncuestaController < ApplicationController
         begin
             encuesta = Encuestum.find( params["id"] )
             if encuesta.update( user_params )
-                render json: encuesta, status: :ok
+                render :json => { :ok => true, :encuesta => encuesta }, status: :accepted
             else
                 render json: encuesta.error, status: :unprocessable_entity
             end
@@ -65,7 +71,7 @@ class V1::EncuestaController < ApplicationController
         begin
             e = Encuestum.find( params["id"] )
             if e.destroy
-                render json: e, status: :ok
+                render :json => { :encuesta => e, :ok => true }, status: :accepted
             end
         rescue  ActiveRecord::RecordNotFound => e
             render json: {
