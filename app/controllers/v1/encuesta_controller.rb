@@ -10,7 +10,7 @@ class V1::EncuestaController < ApplicationController
     def create
         begin    
             aux = get_params
-            aux["opciones"] = aux["opciones"].split(", ")
+            aux["opciones"] = aux["opciones"].split(",")
             
             encuesta = Encuestum.new( aux )
 

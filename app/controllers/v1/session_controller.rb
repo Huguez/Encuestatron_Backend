@@ -6,7 +6,7 @@ class V1::SessionController < ApplicationController
 
     # GET /session/login
     def login
-        begin    
+        begin
             parametros = get_params
             # parametros = params #.require('user').permit( [ "id", "name", "email", "password", "role" ] )
             # render :json => { :error => parametros }
