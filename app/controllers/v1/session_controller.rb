@@ -4,6 +4,10 @@ class V1::SessionController < ApplicationController
     # render :json => { :error => "parametros incompletos" }, :status => :bad_request
     # render json: @user, status: :created
 
+    rescue_from ActionController::ParameterMissing do |exception|
+        render :json => {:error => "Faltaron los parametros", :msg =>  exception.message }, :status => 422
+    end
+
     # GET /session/login
     def login
         begin

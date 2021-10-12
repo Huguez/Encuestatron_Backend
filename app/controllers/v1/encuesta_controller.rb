@@ -1,7 +1,7 @@
 class V1::EncuestaController < ApplicationController
 
     rescue_from ActionController::ParameterMissing do |exception|
-        render :json => {:error => exception.message, :msg => "Faltaron los parametros" }, :status => 422
+        render :json => {:error => "Faltaron los parametros", :msg =>  exception.message }, :status => 422
     end
 
     before_action :authenticate

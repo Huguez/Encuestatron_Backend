@@ -89,7 +89,6 @@ class V1::UserController < ApplicationController
     private
 
     def authenticate
-
         if request.headers['uidtkn']
             x_token = request.headers['uidtkn'].split(' ').last
             resp = JsonWebToken.decode( x_token )

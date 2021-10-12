@@ -1,0 +1,11 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  opcion: 
+  id_votante: 
+  id_encuesta: 1
+
+two:
+  opcion: 
+  id_votante: 
+  id_encuesta: 1
