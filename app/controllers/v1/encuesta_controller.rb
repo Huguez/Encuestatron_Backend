@@ -54,7 +54,7 @@ class V1::EncuestaController < ApplicationController
     def update
         begin
             encuesta = Encuestum.find( params["id"] )
-            if encuesta.update( user_params )
+            if encuesta.update( get_params )
                 render :json => { :ok => true, :encuesta => encuesta }, status: :accepted
             else
                 render json: encuesta.error, status: :unprocessable_entity
@@ -96,6 +96,6 @@ class V1::EncuestaController < ApplicationController
 
     def get_params
         # :name, :email, :password, :role 
-        params.require("encuestum").permit( [ "titulo", "descripcion", "opciones", "activo", "id_user_creator" ] )
+        return params.require("encuestum").permit( [ "titulo", "descripcion", "opciones", "activo", "id_user_creator" ] )
     end
 end
