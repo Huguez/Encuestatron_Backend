@@ -65,11 +65,17 @@ class V1::VotoController < ApplicationController
     end
 
     def voto_usuario
-        render :json => { :prueba => "voto_usuario" }, status: :accepted
+        render :json => { :prueba => "wawa" }, status: :accepted
     end
 
     def voto_encuesta
-        render :json => { :prueba => "voto_encuesta" }, status: :accepted
+        _id = params[:id_survey]
+        data = Voto.where( id_encuesta: _id )
+        if data.length > 0
+            render :json => { :ok => true,  :votos => data.as_json( only: [ "opcion", "id_votante" ] ) }, status: :accepted
+        else
+            render :json => { :ok => false }, status: :accepted
+        end 
     end
     
     def voto_asoc

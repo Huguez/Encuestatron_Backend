@@ -10,7 +10,7 @@ Rails.application.routes.draw do
     resources :voto, only: [ :create, :index, :destroy ]
 
     # votos routes implicitos 
-    match '/voto/encuesta/:id_survey'      => 'voto#voto_encuesta', :via => :get
+    match '/voto/:id_survey/encuesta'      => 'voto#voto_encuesta', :via => :get
     match '/voto/asoc/:id_user/:id_survey' => 'voto#voto_asoc',     :via => :get
 
     # session routes implicitos
