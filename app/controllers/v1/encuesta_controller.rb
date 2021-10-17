@@ -70,6 +70,14 @@ class V1::EncuestaController < ApplicationController
     def destroy
         begin
             e = Encuestum.find( params["id"] )
+            
+            if e
+                votos = Voto.where( id_encuesta: e.id )
+                votos.each do |item|
+                    item.destroy
+                end
+            end
+
             if e.destroy
                 render :json => { :encuesta => e, :ok => true }, status: :accepted
             end
