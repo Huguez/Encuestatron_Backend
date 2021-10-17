@@ -95,7 +95,6 @@ class V1::EncuestaController < ApplicationController
     end    
 
     def get_params
-        # :name, :email, :password, :role 
-        return params.require("encuestum").permit( [ "titulo", "descripcion", "opciones", "activo", "id_user_creator" ] )
+        return params.require("encuestum").permit( [ "titulo", "descripcion", "opciones", "activo", "id_user_creator", "segunda_ronda" ] )
     end
 end
