@@ -105,7 +105,6 @@ class V1::EncuestaController < ApplicationController
     private
 
     def authenticate
-
         if request.headers['uidtkn']
             x_token = request.headers['uidtkn'].split(' ').last
             resp = JsonWebToken.decode( x_token )
@@ -117,6 +116,6 @@ class V1::EncuestaController < ApplicationController
     end    
 
     def get_params
-        return params.require("encuestum").permit( [ "titulo", "descripcion", "opciones", "activo", "id_user_creator", "segunda_ronda" ] )
+        return params.require("encuestum").permit( [ "titulo", "descripcion", "opciones", "activo", "id_user_creator", "segunda_ronda", "abierta" ] )
     end
 end
