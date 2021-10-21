@@ -40,7 +40,7 @@ class V1::UserController < ApplicationController
             auxArray.push( a )
         end
 
-        render json: auxArray
+        render :json =>{ :ok => true, :usuarios => auxArray }, status: :ok
     end
     
     # GET /user/:id
@@ -60,7 +60,7 @@ class V1::UserController < ApplicationController
         begin
             @user = User.find(params[:id])
             if @user.update( user_params )
-                render json: @user, status: :ok
+                render :json => { :ok => true, :usuario => @user } , status: :ok
             else
                 render json: @user.error, status: :unprocessable_entity
             end
@@ -76,7 +76,7 @@ class V1::UserController < ApplicationController
         begin
             @user = User.find( params[:id] )
             if @user.destroy
-                render json: @user, status: :ok
+                render :json => { :ok => true, :user => @user }, status: :ok
             end
         
         rescue ActiveRecord::RecordNotFound => e

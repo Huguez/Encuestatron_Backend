@@ -29,8 +29,8 @@ class V1::EncuestaController < ApplicationController
     #GET /encuesta/
     def index
         begin
-        e = Encuestum.all
-        render :json => { :encuestas => e, :ok => true  } , :status => :accepted
+            e = Encuestum.all
+            render :json => { :encuestas => e, :ok => true  } , :status => :accepted
         rescue => e
             render json: {
                 error: e.to_s
@@ -82,6 +82,20 @@ class V1::EncuestaController < ApplicationController
                 render :json => { :encuesta => e, :ok => true }, status: :accepted
             end
         rescue  ActiveRecord::RecordNotFound => e
+            render json: {
+                error: e.to_s
+            }, status: :not_found
+        end
+    end
+
+    def search
+        begin
+            term = params[:term]
+            encuestas = Encuestum.where( "titulo LIKE ? ", "%" + term + "%" ).or( 
+                Encuestum.where( "descripcion LIKE ? ", "%" + term + "%" ) 
+            )
+            render :json => { :ok => true,  :encuestas => encuestas }, status: :ok
+        rescue => e
             render json: {
                 error: e.to_s
             }, status: :not_found
