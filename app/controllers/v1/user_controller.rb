@@ -10,9 +10,9 @@ class V1::UserController < ApplicationController
     # POST /user/
     def create
         begin
-            @campos = [ "name", "email", "password", "role" ]
+            campos = [ "name", "email", "password", "role" ]
             
-            @campos.each do |elem|
+            campos.each do |elem|
                 if params["user"][elem].nil?
                     render :json => { :error => "parametros incompletos" }, :status => :bad_request
                 end
@@ -58,11 +58,11 @@ class V1::UserController < ApplicationController
     # PUT/PATH /user/:id
     def update
         begin
-            @user = User.find(params[:id])
-            if @user.update( user_params )
-                render :json => { :ok => true, :usuario => @user } , status: :ok
+            user = User.find(params[:id])
+            if user.update( user_params )
+                render :json => { :ok => true, :usuario => user } , status: :ok
             else
-                render json: @user.error, status: :unprocessable_entity
+                render json: user.error, status: :unprocessable_entity
             end
         rescue ActiveRecord::RecordNotFound => e
             render json: {
